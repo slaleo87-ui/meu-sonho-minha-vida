@@ -74,8 +74,10 @@ export default function App() {
     }
   }
 
-  async function sair() {
-    const { error } = await supabase.auth.signOut()
+    async function sair() {
+    const { error } = await supabase.auth.signOut({
+      scope: 'local'
+    })
 
     if (error) {
       setMensagem(error.message)
