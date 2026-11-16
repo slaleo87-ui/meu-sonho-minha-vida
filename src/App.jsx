@@ -40,7 +40,47 @@ export default function App() {
 
     return () => subscription.unsubscribe()
   }, [])
+  async function entrarOuCadastrar(e) {
+    e.preventDefault()
+    setMensagem('')
+    setCarregando(true)
 
+    try {
+      if (cadastro) {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password: senha
+        })
+
+        if (error) throw error
+
+        if (data.session) {
+          setMensagem('Cadastro realizado com sucesso!')
+        } else {
+          setMensagem('Cadastro realizado! Confira seu e-mail para confirmar a conta.')
+        }
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password: senha
+        })
+
+        if (error) throw error
+      }
+    } catch (error) {
+      setMensagem(error.message)
+    } finally {
+      setCarregando(false)
+    }
+  }
+
+  async function sair() {
+    const { error } = await supabase.auth.signOut()
+
+    if (error) {
+      setMensagem(error.message)
+    }
+  }
   const categorias = [
     { nome: 'Compras', limite: 500, icone: ShoppingBag },
     { nome: 'Alimentação', limite: 700, icone: Utensils },
