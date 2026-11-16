@@ -231,6 +231,9 @@ export default function App() {
             <option value="Conjunto">Visão conjunta</option>
             <option value="Pessoal">Visão pessoal</option>
           </select>
+                    <button className="btn" onClick={sair}>
+            Sair
+          </button>
         </div>
       </header>
 
