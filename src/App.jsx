@@ -127,7 +127,51 @@ export default function App() {
     style: 'currency',
     currency: 'BRL'
   })
+  if (carregando) {
+    return <div className="app">Carregando...</div>
+  }
 
+  if (!usuario) {
+    return (
+      <div className="app">
+        <div style={{ maxWidth: '400px', margin: '80px auto', padding: '24px' }}>
+          <h1>Meu sonho, minha vida</h1>
+          <h2>{cadastro ? 'Criar conta' : 'Entrar'}</h2>
+
+          <form onSubmit={entrarOuCadastrar}>
+            <input
+              type="email"
+              placeholder="Seu e-mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+
+            <input
+              type="password"
+              placeholder="Sua senha"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+              required
+            />
+
+            <button type="submit" disabled={carregando}>
+              {cadastro ? 'Cadastrar' : 'Entrar'}
+            </button>
+          </form>
+
+          {mensagem && <p>{mensagem}</p>}
+
+          <button type="button" onClick={() => {
+            setCadastro(!cadastro)
+            setMensagem('')
+          }}>
+            {cadastro ? 'Já tenho uma conta' : 'Criar uma conta'}
+          </button>
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="app">
       <style>{`
