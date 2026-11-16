@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { supabase } from './supabase'
 import {
   Wallet, TrendingUp, TrendingDown, Plus, Target,
@@ -8,6 +8,12 @@ import {
 } from 'lucide-react'
 
 export default function App() {
+  const [usuario, setUsuario] = useState(null)
+  const [carregando, setCarregando] = useState(true)
+  const [email, setEmail] = useState('')
+  const [senha, setSenha] = useState('')
+  const [cadastro, setCadastro] = useState(false)
+  const [mensagem, setMensagem] = useState('')
   const [pagina, setPagina] = useState('Início')
   const [despesas, setDespesas] = useState([])
   const [descricao, setDescricao] = useState('')
@@ -16,6 +22,24 @@ export default function App() {
   const [tipo, setTipo] = useState('despesa')
   const [mostrarFormulario, setMostrarFormulario] = useState(false)
   const [modo, setModo] = useState('Conjunto')
+      useEffect(() => {
+    async function verificarUsuario() {
+      const { data: { session } } = await supabase.auth.getSession()
+      setUsuario(session?.user ?? null)
+      setCarregando(false)
+    }
+
+    verificarUsuario()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUsuario(session?.user ?? null)
+        setCarregando(false)
+      }
+    )
+
+    return () => subscription.unsubscribe()
+  }, [])
 
   const categorias = [
     { nome: 'Compras', limite: 500, icone: ShoppingBag },
