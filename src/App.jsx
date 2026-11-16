@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react'
+import { supabase } from './supabase'
 import {
   Wallet, TrendingUp, TrendingDown, Plus, Target,
   CreditCard, Bell, LayoutDashboard, Users,
